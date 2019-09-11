@@ -75,7 +75,7 @@ From there we can see how the `dev` profile will inject a user name and password
 
 In the `scripts` directory I have included some basic scripts to launch GemFire.   The script will launch one locator and two cache servers.
 
-We can also optionally deploy or not deploy the Kafka integration. 
+We can also optionally deploy or not deploy the Kafka integration.   In this "script" I will go with the idea that we are leaving the kafka integration to last moment. 
 
 ## Start GemFire for local testing
 
@@ -95,6 +95,8 @@ java -jar build/libs/data-driver-0.0.1-SNAPSHOT.jar
 curl -X GET \
   'http://localhost:8080/createCustomers?count=5' 
 ```
+**Note:** This data will not be in the queue for kafka since we haven't told GemFire about the integration.
+ 
 ## Deploy the kafka integration
 
 ```shell script
@@ -129,6 +131,8 @@ gfsh>create async-event-queue --id=kafka-queue --listener=example.geode.kafka.Ka
 gfsh>alter region --name=/test --async-event-queue-id=kafka-queue
 
 ```
+All future events will be sent out over Kafka.
+
 ## Word of caution with Kafka Integration
 
 The Kafka client will hang if the network doesn't work.    This means when you create the aync event queue and Kafka doesn't work or the route to the host doesn't exist the GFSH command will not return in a timely fashion.   GFSH will ultimately time out - but that thread is stuck on the server.    Since Cloud Cache doesn't offer a `restart` you will have to destroy and recreate the instance if you want a pristine server.
