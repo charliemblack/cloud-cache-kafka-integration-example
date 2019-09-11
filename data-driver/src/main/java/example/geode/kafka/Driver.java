@@ -19,26 +19,51 @@ package example.geode.kafka;
 
 import io.codearte.jfairy.Fairy;
 import io.codearte.jfairy.producer.person.Person;
+import org.apache.geode.cache.GemFireCache;
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
-import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
-import org.apache.geode.pdx.ReflectionBasedAutoSerializer;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.gemfire.config.annotation.ClientCacheApplication;
+import org.springframework.data.gemfire.config.annotation.EnablePdx;
+import org.springframework.data.gemfire.config.annotation.EnableSecurity;
+import org.springframework.data.gemfire.mapping.MappingPdxSerializer;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.UUID;
 
+@RestController
+@Profile("dev")
+@ClientCacheApplication(name = "Kafka", logLevel = "error")
+@EnablePdx(serializerBeanName = "pdxSerializer")
+@EnableSecurity
+@SpringBootApplication
 public class Driver {
-    public static void main(String[] args) {
-        ClientCache clientCache = new ClientCacheFactory()
-                .addPoolLocator("localhost", 10334)
-                .setPdxSerializer(new ReflectionBasedAutoSerializer("example.geode.kafka.*"))
-                .setPdxReadSerialized(false)
-                .set("log-level", "warning")
-                .create();
-        Region<String, Customer> customerRegion = clientCache.<String, Customer>createClientRegionFactory(ClientRegionShortcut.PROXY).create("test");
 
+    @Resource
+    Region<String, Customer> customerRegion;
+
+    @Bean
+    MappingPdxSerializer pdxSerializer() {
+        MappingPdxSerializer pdxSerializer = new MappingPdxSerializer();
+        pdxSerializer.setIncludeTypeFilters(type -> Customer.class.isAssignableFrom(type));
+        return pdxSerializer;
+    }
+
+    @Bean
+    Region<String, Customer> customerRegion(GemFireCache gemfireCache) {
+        return ((ClientCache)gemfireCache).<String, Customer>createClientRegionFactory(ClientRegionShortcut.PROXY).create("test");
+    }
+
+    @RequestMapping("/createCustomers")
+    public boolean createCustomers(int count) {
         Fairy fairy = Fairy.create();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < count; i++) {
             Person person = fairy.person();
             Customer customer = Customer.builder()
                     .firstName(person.getFirstName())
@@ -56,10 +81,12 @@ public class Driver {
                     .nationalIdentityCardNumber(person.getNationalIdentityCardNumber())
                     .passportNumber(person.getPassportNumber())
                     .guid(UUID.randomUUID().toString()).build();
-
-            System.out.println("new customer.getGuid() = " + customer.getGuid());
-
             customerRegion.put(customer.getGuid(), customer);
         }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(Driver.class, args);
     }
 }

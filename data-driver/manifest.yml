@@ -1,0 +1,7 @@
+---
+applications:
+  - name: kafka-driver
+    path: build/libs
+    buildpack: java_buildpack_offline
+    services:
+      - mypcc

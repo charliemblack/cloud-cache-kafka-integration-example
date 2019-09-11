@@ -15,5 +15,5 @@
  *
  */
 
-rootProject.name='geode-kafka'
-include 'geode-kafka-driver','geode-kafka-listener'
+rootProject.name='cloud-cache-kafka'
+include 'data-driver','kafka-geode-integration'

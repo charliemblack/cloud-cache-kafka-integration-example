@@ -2,36 +2,42 @@
 
 In this project I show a sample integration between two Apache projects:
 
-Apache Geode and Apache Kafka
+Cloud Cache powered by Apache Geode and Apache Kafka
 
 As we may know Apache Geode is a high performance key value data store.   At Geode heart is a rich eventing system.   That eventing system allows developer to build rich event driven applications.
 
 We are going to use Geode's event architecture to integration its data operations with Kafka.  In this example I am going to be using Geode's ``AsyncEventListener`` to asynchronously send data to Kafka so Geode data operations can work at in memory speeds.
 
-# How to deploy the project in Geode
+# How to deploy the project in Cloud Cache
 
-The script below shows how to start up a Geode system and deploy code to integrate Geode and Kafka.
+The script below shows how connect to a Cloud Cache system and deploy code allow change data capture to be emitted to Kafka.
 
 ```
-start locator --name=locator
-configure pdx --read-serialized=true
-start server --name=server1
-deploy --dir=/Users/cblack/Downloads/geode-kafka/listener/build/dependancies
+connect --url=https://cloudcache-b08b23e4-e04d-462a-9ff0-542f6976a5e1.run.pcfone.io/gemfire/v1 --user=username --password=password
+deploy --dir=kafka-geode-integration/build/dependancies
 y
-deploy --dir=/Users/cblack/Downloads/geode-kafka/listener/build/libs
+deploy --dir=kafka-geode-integration/build/libs
 y
-create async-event-queue --id=kafka-queue --listener=example.geode.kafka.KafkaAsyncEventListener --listener-param=bootstrap.servers#192.168.127.165:9092 --batch-size=5 --batch-time-interval=1000
+create async-event-queue --id=kafka-queue --listener=example.geode.kafka.KafkaAsyncEventListener --listener-param=bootstrap.servers#somekafkahost:9092 --batch-size=5 --batch-time-interval=1000
 create region --name=test --type=PARTITION --async-event-queue-id=kafka-queue
-
 
 ```
 
 # Example Output from Kafka
 
-In Geode's ``AsyncEventListener`` we converted the ``Customer`` plain ole java object to JSON.      In the ``Driver`` we sent in 10 Customer records and we can see that Kafka recieved those 10 JSON documents.  The sample output can be seen below:
+In Geode's `AsyncEventListener` we converted the `Customer` plain ole java object to JSON.      We then publish that JSON document on to a Kafaka topic.   
+
+To start the data flow we use `Driver` service that we deployed to PCF.   That service takes an argument and starts to create customers based on the `count` of customers passed in.   In the below code snippet we ask the service to push 5 customers into the system.
+
+```$bash
+curl -X GET \
+  'http://localhost:8080/createCustomers?count=5' 
+```
+
+Start up a kafka listener somewhere - kafka has a console consumer lets use that for now.
 
 ```
-demo@demo-kafka:~/kafka_2.11-1.0.0$ bin/kafka-console-consumer.sh --bootstrap-server 192.168.127.165:9092 --topic test  
+demo@demo-kafka:~/kafka_2.11-1.0.0$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test  
 {
   "guid" : "b4af31db-f129-4437-b315-60ef72ce1968",
   "firstName" : "Alexis",

@@ -15,6 +15,20 @@
  *
  */
 
+buildscript {
+    ext {
+        springBootVersion = '2.1.8.BUILD-SNAPSHOT'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
 plugins {
     id 'io.franzbecker.gradle-lombok' version '1.11'
 }
@@ -23,6 +37,9 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
+        maven { url 'https://repo.spring.io/libs-release' }
+        maven { url 'https://repo.spring.io/libs-milestone' }
+        maven { url 'https://repo.spring.io/libs-snapshot' }
     }
 }
 
@@ -30,7 +47,7 @@ subprojects {
     apply plugin: 'java'
     sourceCompatibility = 1.8
 
-    group = 'example.geode'
+    group = 'example.cloudcache'
     version = '0.0.1-SNAPSHOT'
 
     configurations {
@@ -49,17 +66,21 @@ subprojects {
     }
 }
 
-project(':geode-kafka-driver') {
+project(':data-driver') {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
     dependencies {
         compile 'io.codearte.jfairy:jfairy:0.5.9'
-        compileOnly 'org.projectlombok:lombok:1.16.20'
-        compile 'org.apache.geode:geode-core:1.3.0'
+        compileOnly 'org.projectlombok:lombok:1.18.8'
+        annotationProcessor 'org.projectlombok:lombok:1.18.8'
+        compile 'io.pivotal.gemfire:geode-core:9.8.3'
+        compile 'org.springframework.geode:spring-gemfire-starter:1.1.0.RELEASE'
+        compile "org.springframework.boot:spring-boot-starter-web:2.1.8.RELEASE"
     }
-
 }
-project(':geode-kafka-listener') {
+project(':kafka-geode-integration') {
     dependencies {
-        provided 'org.apache.geode:geode-core:1.3.0'
+        provided 'io.pivotal.gemfire:geode-core:9.8.3'
         compile 'org.apache.kafka:kafka-clients:1.0.0'
     }
 }
