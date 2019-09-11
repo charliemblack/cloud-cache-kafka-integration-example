@@ -36,7 +36,7 @@ To start the data flow we use `Driver` service that we deployed to PCF.   That s
 
 ```$bash
 curl -X GET \
-  'http://localhost:8080/createCustomers?count=5' 
+  'http://mypcf-url:8080/createCustomers?count=5' 
 ```
 
 Start up a kafka listener somewhere - kafka has a console consumer lets use that for now.
@@ -59,150 +59,81 @@ demo@demo-kafka:~/kafka_2.11-1.0.0$ bin/kafka-console-consumer.sh --bootstrap-se
   "nationalIdentificationNumber" : "",
   "passportNumber" : "6kuqL2tq9"
 }
-{
-  "guid" : "0d8942f2-d5ff-4d9a-9f3c-d0ba9f4890fc",
-  "firstName" : "Ariana",
-  "middleName" : "Sophia",
-  "lastName" : "Carter",
-  "email" : "ariana.carter@yahoo.com",
-  "username" : "acarter",
-  "password" : "cQdqiTQs",
-  "telephoneNumber" : "971-500-858",
-  "dateOfBirth" : "2002-03-13T05:26:26.545-08:00",
-  "age" : 15,
-  "companyEmail" : "ariana.carter@interdemltd.com",
-  "nationalIdentityCardNumber" : "308-04-8381",
-  "nationalIdentificationNumber" : "",
-  "passportNumber" : "5KDAvOpcV"
-}
-{
-  "guid" : "c1aa630b-9d19-4bec-90bb-ace1dcbf8750",
-  "firstName" : "Alex",
-  "middleName" : "Bryson",
-  "lastName" : "Burton",
-  "email" : "alex.burton@mail.com",
-  "username" : "alexb",
-  "password" : "zNbxbw4U",
-  "telephoneNumber" : "653-624-0341",
-  "dateOfBirth" : "1939-11-27T08:51:42.519-08:00",
-  "age" : 78,
-  "companyEmail" : "alex.burton@vitaeltd.biz",
-  "nationalIdentityCardNumber" : "669-18-8704",
-  "nationalIdentificationNumber" : "",
-  "passportNumber" : "9voFQrTgx"
-}
-{
-  "guid" : "cc375974-3f1a-48db-9c1d-727734d80e50",
-  "firstName" : "Faith",
-  "middleName" : "",
-  "lastName" : "Grimes",
-  "email" : "faith.grimes@yahoo.com",
-  "username" : "faithg",
-  "password" : "VqxwyBbI",
-  "telephoneNumber" : "449-533-3093",
-  "dateOfBirth" : "1956-06-01T23:15:21.779-07:00",
-  "age" : 61,
-  "companyEmail" : "faith.grimes@morsemindustries.com",
-  "nationalIdentityCardNumber" : "041-09-5054",
-  "nationalIdentificationNumber" : "",
-  "passportNumber" : "j3W2ScmXR"
-}
-{
-  "guid" : "3f7393d4-e026-4697-a0e2-ddad1368765b",
-  "firstName" : "Bailey",
-  "middleName" : "Annabelle",
-  "lastName" : "Kirby",
-  "email" : "bailey.kirby@yahoo.com",
-  "username" : "bkirby",
-  "password" : "vOzigmjy",
-  "telephoneNumber" : "697-590-724",
-  "dateOfBirth" : "1980-01-26T09:08:28.288-08:00",
-  "age" : 37,
-  "companyEmail" : "bailey.kirby@felicsconsulting.biz",
-  "nationalIdentityCardNumber" : "249-82-9524",
-  "nationalIdentificationNumber" : "",
-  "passportNumber" : "DQ7MM477N"
-}
-{
-  "guid" : "fe127d9c-1f5f-44fb-9a9b-ec219f854402",
-  "firstName" : "Ella",
-  "middleName" : "",
-  "lastName" : "Morrow",
-  "email" : "ella.morrow@gmail.com",
-  "username" : "ellam",
-  "password" : "DUJd38Gt",
-  "telephoneNumber" : "212-183-5694",
-  "dateOfBirth" : "1982-12-31T20:01:27.089-08:00",
-  "age" : 35,
-  "companyEmail" : "ella.morrow@yrsaltd.com",
-  "nationalIdentityCardNumber" : "477-09-2268",
-  "nationalIdentificationNumber" : "",
-  "passportNumber" : "oP2goax24"
-}
-{
-  "guid" : "888b2a88-b872-4d31-bb48-31facec4cc34",
-  "firstName" : "James",
-  "middleName" : "Evan",
-  "lastName" : "Weeks",
-  "email" : "weeks@yahoo.com",
-  "username" : "jweeks",
-  "password" : "0IZn4Zg4",
-  "telephoneNumber" : "146-682-2264",
-  "dateOfBirth" : "1940-09-10T07:14:58.862-08:00",
-  "age" : 77,
-  "companyEmail" : "james.weeks@kleinconsulting.com",
-  "nationalIdentityCardNumber" : "492-65-0720",
-  "nationalIdentificationNumber" : "",
-  "passportNumber" : "4K5NVid7r"
-}
-{
-  "guid" : "949eafe9-2fd0-49f3-9f71-4841ca18feae",
-  "firstName" : "Ariana",
-  "middleName" : "",
-  "lastName" : "Blankenship",
-  "email" : "ariana.blankenship@mail.com",
-  "username" : "arianab",
-  "password" : "Oqb3rHr9",
-  "telephoneNumber" : "376-072-3754",
-  "dateOfBirth" : "1941-01-01T07:44:17.866-08:00",
-  "age" : 77,
-  "companyEmail" : "ariana.blankenship@interdemlimited.com",
-  "nationalIdentityCardNumber" : "115-36-1831",
-  "nationalIdentificationNumber" : "",
-  "passportNumber" : "wKVKdeRjh"
-}
-{
-  "guid" : "601db5af-7b30-462e-8eb9-3a04adfa9456",
-  "firstName" : "Lily",
-  "middleName" : "",
-  "lastName" : "Mcfadden",
-  "email" : "lilymcfadden@yahoo.com",
-  "username" : "lmcfadden",
-  "password" : "LlbDSdaj",
-  "telephoneNumber" : "754-242-6114",
-  "dateOfBirth" : "1957-07-07T06:31:10.849-07:00",
-  "age" : 60,
-  "companyEmail" : "lily.mcfadden@erntogra.eu",
-  "nationalIdentityCardNumber" : "769-12-9910",
-  "nationalIdentificationNumber" : "",
-  "passportNumber" : "zf097cUYx"
-}
-{
-  "guid" : "598ec0e6-a954-43e4-ae02-4d1fef06910d",
-  "firstName" : "Piper",
-  "middleName" : "",
-  "lastName" : "Conner",
-  "email" : "conner@mail.com",
-  "username" : "pconner",
-  "password" : "NSHjiY9x",
-  "telephoneNumber" : "346-285-0814",
-  "dateOfBirth" : "1924-03-21T05:45:13.111-08:00",
-  "age" : 93,
-  "companyEmail" : "piper.conner@quicklink.com",
-  "nationalIdentityCardNumber" : "126-29-7853",
-  "nationalIdentificationNumber" : "",
-  "passportNumber" : "xGg9u1HBB"
-}
-^CProcessed a total of 10 messages
+...
 
 ```
+
+# Running local
+
+Its common practice to run everything locally before pushing our application to PCF.    With Cloud Cache its no different.    Just download the same version of GemFire as cloud cache packages, you can find out which version of GemFire it pacakges in the cloud cache readme which is typically hosted here: https://docs.pivotal.io/p-cloud-cache/1-8/release-notes.html
+
+Since security is turned on in Cloud Cache I have created some scripts to launch GemFire with security turned on.   While its not the same security implementation it will give you some practice with working with a secured environment.    
+
+For this project we are using spring boot data GemFire which does all of the heavy lifting for us for security.    You can see how the security is configured by looking at the [application.yml](data-driver/src/main/resources/application.yml)
+
+From there we can see how the `dev` profile will inject a user name and password.   
+
+In the `scripts` directory I have included some basic scripts to launch GemFire.   The script will launch one locator and two cache servers.
+
+We can also optionally deploy or not deploy the Kafka integration. 
+
+## Start GemFire for local testing
+
+```shell script
+cd <clone>/scripts
+./start_gemfire.sh
+```
+
+## Start the Spring Boot Data Driver
+```shell script
+cd <clone>/data-driver
+java -jar build/libs/data-driver-0.0.1-SNAPSHOT.jar
+```
+
+## Play in some data
+```shell script
+curl -X GET \
+  'http://localhost:8080/createCustomers?count=5' 
+```
+## Deploy the kafka integration
+
+```shell script
+gfsh>connect --locator=localhost[10334] --security-properties-file=<clone>/config/gfsecurity.properties
+gfsh>deploy --dir=kafka-geode-integration/build/libs
+
+Deploying files: kafka-geode-integration-0.0.1-SNAPSHOT.jar
+Total file size is: 0.00MB
+
+Continue?  (Y/n): y
+Member  |                Deployed JAR                | Deployed JAR Location
+------- | ------------------------------------------ | -----------------------------------------------------------------------------------------------------------------------------------
+server1 | kafka-geode-integration-0.0.1-SNAPSHOT.jar | /Users/cblack/dev/projects/samples/cloud-cache-kafka-integration-example/data/server1/kafka-geode-integration-0.0.1-SNAPSHOT.v1.jar
+server2 | kafka-geode-integration-0.0.1-SNAPSHOT.jar | /Users/cblack/dev/projects/samples/cloud-cache-kafka-integration-example/data/server2/kafka-geode-integration-0.0.1-SNAPSHOT.v1.jar
+
+gfsh>deploy --dir=kafka-geode-integration/build/dependancies
+
+Deploying files: snappy-java-1.1.4.jar, kafka-clients-1.0.0.jar, lz4-java-1.4.jar
+Total file size is: 3.31MB
+
+Continue?  (Y/n): y
+Member  |      Deployed JAR       | Deployed JAR Location
+------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------
+server1 | snappy-java-1.1.4.jar   | /Users/cblack/dev/projects/samples/cloud-cache-kafka-integration-example/data/server1/snappy-java-1.1.4.v1.jar
+server1 | kafka-clients-1.0.0.jar | /Users/cblack/dev/projects/samples/cloud-cache-kafka-integration-example/data/server1/lz4-java-1.4.v1.jar
+server1 | lz4-java-1.4.jar        | /Users/cblack/dev/projects/samples/cloud-cache-kafka-integration-example/data/server1/kafka-clients-1.0.0.v1.jar
+server2 | snappy-java-1.1.4.jar   | /Users/cblack/dev/projects/samples/cloud-cache-kafka-integration-example/data/server2/snappy-java-1.1.4.v1.jar
+server2 | kafka-clients-1.0.0.jar | /Users/cblack/dev/projects/samples/cloud-cache-kafka-integration-example/data/server2/lz4-java-1.4.v1.jar
+server2 | lz4-java-1.4.jar        | /Users/cblack/dev/projects/samples/cloud-cache-kafka-integration-example/data/server2/kafka-clients-1.0.0.v1.jar
+
+gfsh>create async-event-queue --id=kafka-queue --listener=example.geode.kafka.KafkaAsyncEventListener --listener-param=bootstrap.servers#somekafkahost:9092 --batch-size=5 --batch-time-interval=1000
+gfsh>alter region --name=/test --async-event-queue-id=kafka-queue
+
+```
+## Word of caution with Kafka Integration
+
+The Kafka client will hang if the network doesn't work.    This means when you create the aync event queue and Kafka doesn't work or the route to the host doesn't exist the GFSH command will not return in a timely fashion.   GFSH will ultimately time out - but that thread is stuck on the server.    Since Cloud Cache doesn't offer a `restart` you will have to destroy and recreate the instance if you want a pristine server.
+
+
+
+
+
