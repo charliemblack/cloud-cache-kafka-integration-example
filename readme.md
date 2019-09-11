@@ -1,31 +1,36 @@
 # Summary
 
-In this project I show a sample integration between two Apache projects:
+In this project I show a sample integration between Pivotal Cloud Cache and Apache Kafka.    
 
-Cloud Cache powered by Apache Geode and Apache Kafka
+Cloud Cache is a high performance key value data store powered by Apache Geode.   At Geode's heart is a rich eventing system.   That eventing system allows developer to build rich event driven applications.
 
-As we may know Apache Geode is a high performance key value data store.   At Geode heart is a rich eventing system.   That eventing system allows developer to build rich event driven applications.
+We are going to use this event driven architecture to empower change data capture and forward those data events to Kafka.  In this example I am going to be using Geode's ``AsyncEventListener`` to asynchronously send data to Kafka so Geode data operations can continue to work at in memory speeds.
 
-We are going to use Geode's event architecture to integration its data operations with Kafka.  In this example I am going to be using Geode's ``AsyncEventListener`` to asynchronously send data to Kafka so Geode data operations can work at in memory speeds.
-
-# How to deploy the project in Cloud Cache
+# How to deploy the Geode Kafka Integration to Pivotal Cloud Cache
 
 The script below shows how connect to a Cloud Cache system and deploy code allow change data capture to be emitted to Kafka.
 
-```
-connect --url=https://cloudcache-b08b23e4-e04d-462a-9ff0-542f6976a5e1.run.pcfone.io/gemfire/v1 --user=username --password=password
+```shell script
+gfsh
+connect --url=https://cloudcache-url/gemfire/v1 --user=username --password=password
 deploy --dir=kafka-geode-integration/build/dependancies
 y
 deploy --dir=kafka-geode-integration/build/libs
 y
 create async-event-queue --id=kafka-queue --listener=example.geode.kafka.KafkaAsyncEventListener --listener-param=bootstrap.servers#somekafkahost:9092 --batch-size=5 --batch-time-interval=1000
 create region --name=test --type=PARTITION --async-event-queue-id=kafka-queue
-
 ```
+# Deploy the Data Driver
 
+The data driver for this project is a rest service with one method - `createCustomers`.    This method will create as many customers as the `count` argument that is passed in.
+
+```shell script
+cd <clone>/data-driver
+cf push
+```
 # Example Output from Kafka
 
-In Geode's `AsyncEventListener` we converted the `Customer` plain ole java object to JSON.      We then publish that JSON document on to a Kafaka topic.   
+In Geode's `AsyncEventListener` we converted the `Customer` plain ole java object to JSON.      We then publish that JSON document on to a Kafka topic.   
 
 To start the data flow we use `Driver` service that we deployed to PCF.   That service takes an argument and starts to create customers based on the `count` of customers passed in.   In the below code snippet we ask the service to push 5 customers into the system.
 

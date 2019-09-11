@@ -14,7 +14,10 @@
 #
 #
 
-
+spring:
+  profiles:
+    active: dev
+---
 spring:
   # everything that follows belongs to the devel environment
   profiles: dev

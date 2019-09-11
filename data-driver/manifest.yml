@@ -1,7 +1,7 @@
 ---
 applications:
   - name: kafka-driver
-    path: build/libs
+    path: build/libs/data-driver-0.0.1-SNAPSHOT.jar
     buildpack: java_buildpack_offline
     services:
-      - mypcc
+      - cloudcache-dev

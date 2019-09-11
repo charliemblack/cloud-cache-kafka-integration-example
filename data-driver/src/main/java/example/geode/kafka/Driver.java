@@ -38,7 +38,6 @@ import javax.annotation.Resource;
 import java.util.UUID;
 
 @RestController
-@Profile("dev")
 @ClientCacheApplication(name = "Kafka", logLevel = "error")
 @EnablePdx(serializerBeanName = "pdxSerializer")
 @EnableSecurity
